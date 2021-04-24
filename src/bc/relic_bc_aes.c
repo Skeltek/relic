@@ -47,18 +47,18 @@ int bc_aes_cbc_enc(uint8_t *out, int *out_len, uint8_t *in,
 
 	int pad_len = 16 - (in_len - 16 * (in_len/16));
 	if (*out_len < in_len + pad_len) {
-		return RLC_ERR;
+		return 1;
 	}
 	if (makeKey2(&key_inst, DIR_ENCRYPT, 8 * key_len, (char *)key) != TRUE) {
-		return RLC_ERR;
+		return 2;
 	}
 	if (cipherInit(&cipher_inst, MODE_CBC, NULL) != TRUE) {
-		return RLC_ERR;
+		return 3;
 	}
 	memcpy(cipher_inst.IV, iv, RLC_BC_LEN);
 	*out_len = padEncrypt(&cipher_inst, &key_inst, in, in_len, out);
 	if (*out_len <= 0) {
-		return RLC_ERR;
+		return 4;
 	}
 	return RLC_OK;
 }
